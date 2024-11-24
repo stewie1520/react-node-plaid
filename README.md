@@ -1,3 +1,10 @@
+![ci be](https://github.com/stewie1520/react-node-plaid/actions/workflows/ci-be.yml/badge.svg)
+![ci fe](https://github.com/stewie1520/react-node-plaid/actions/workflows/ci-fe.yml/badge.svg)
+
+# REACT-NODE-PLAID
+
+![connect](https://github.com/stewie1520/react-node-plaid/blob/main/assets/connect.png)
+
 ## BE
 
 Cd to working directory:
