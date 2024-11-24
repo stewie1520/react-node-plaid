@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7.0 # Use the desired version
+    container_name: plaid_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7.4.1-alpine
+    container_name: plaid_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongo_data:
+    driver: local
+  redis_data:
+    driver: local
