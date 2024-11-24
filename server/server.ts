@@ -17,6 +17,12 @@ connectDb();
 
 app.post('/api/create_link_token', async (_, res) => {
   try {
+    const alreadyLink = await LinkModel.countDocuments().then(count => count > 0);
+    if (alreadyLink) {
+      res.status(400).json({ error: 'Link already exists' });
+      return;
+    }
+
     const response = await plaidClient.linkTokenCreate({
       user: { client_user_id: 'user-' + Math.random().toString(36).substring(2, 15) },
       client_name: 'Plaid Connect App',
@@ -41,10 +47,20 @@ app.post('/api/create_link_token', async (_, res) => {
   }
 });
 
+const bodySchema = z.object({
+  publicToken: z.string(),
+});
+
 app.post('/api/exchange_public_token', async (req, res) => {
   try {
+    const { success, data: body } = await bodySchema.safeParseAsync(req.body);
+    if (!success) {
+      res.status(400).json({ error: 'Invalid body parameters' });
+      return;
+    }
+
     const response = await plaidClient.itemPublicTokenExchange({
-      public_token: req.body.publicToken,
+      public_token: body.publicToken,
     });
     
     const token = response.data.access_token;
@@ -151,7 +167,7 @@ app.get('/api/transactions', async (req, res) => {
 
 setInterval(async () => {
   await processTransactionsSync();
-}, 1000 * 60 * 5);
+}, 1000 * 60 * 1);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
