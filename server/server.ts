@@ -165,6 +165,33 @@ app.get('/api/transactions', async (req, res) => {
   }
 });
 
+app.get('/api/accounts', async (_, res) => {
+  try {
+    const link = await LinkModel.findOne();
+    if (!link) {
+      res.json({ items: [] });
+      return;
+    }
+
+    const response = await plaidClient.accountsGet({
+      access_token: link.token,
+    });
+
+    return res.json({ items: response.data.accounts });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error('Error fetching accounts:', error);
+      res.status(500).json({ 
+        error: error.response?.data?.error_message || error.message 
+      });
+      return;
+    }
+
+    console.error('Error fetching accounts:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
 setInterval(async () => {
   await processTransactionsSync();
 }, 1000 * 60 * 1);

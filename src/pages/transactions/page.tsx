@@ -4,6 +4,7 @@ import { TransactionList } from "./components/TransactionList";
 import { ArrowLeft } from "lucide-react";
 
 function TransactionPage() {
+  console.log('TransactionPage');
   const isLinked = useLoaderData();
   const navigate = useNavigate();
 

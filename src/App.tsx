@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ConnectBankPage from "./pages/connect-bank/page";
 import { loader } from "./pages/transactions/loader";
 import TransactionsPage from "./pages/transactions/page";
+import AccountsPage from "./pages/accounts/page";
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -13,6 +14,11 @@ const router = createBrowserRouter([
   {
     path: "/transactions",
     element: <TransactionsPage />,
+    loader: loader(queryClient)
+  },
+  {
+    path: "/accounts",
+    element: <AccountsPage />,
     loader: loader(queryClient)
   }
 ])
